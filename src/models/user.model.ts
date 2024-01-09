@@ -2,7 +2,7 @@ import { NextFunction } from "express";
 import mongoose from "mongoose";
 import bcrypt from "bcrypt";
 import config from "config";
-export interface userDocument extends mongoose.Document {
+export interface UserDocument extends mongoose.Document {
   username: string;
   password: string;
   repeat_password: string;
@@ -12,7 +12,7 @@ export interface userDocument extends mongoose.Document {
   comparePassword(userPassword: string): Promise<boolean>;
 }
 
-const createUserModel = async function () {
+const createUserModel: any = async function () {
   const userSchema = new mongoose.Schema(
     {
       username: { type: String, required: true, unique: true },
@@ -26,7 +26,7 @@ const createUserModel = async function () {
   );
 
   userSchema.pre("save", async function (next) {
-    let self = this as userDocument;
+    let self = this as UserDocument;
     if (!self.isModified("password")) {
       return next();
     }
@@ -41,13 +41,14 @@ const createUserModel = async function () {
   userSchema.methods.comparePassword = async function (
     userPassword: string
   ): Promise<boolean> {
-    let self = this as userDocument;
+    let self = this as UserDocument;
     return await bcrypt
-      .compare(self.password, userPassword)
+      .compare(userPassword, self.password)
       .catch((e) => false);
   };
   const userModel =
-    (await mongoose.models.User) || (await mongoose.model("User", userSchema));
+    (await mongoose.models.User) ||
+    (await mongoose.model<UserDocument>("User", userSchema));
   return userModel;
 };
 

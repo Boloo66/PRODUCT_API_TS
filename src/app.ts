@@ -5,6 +5,7 @@ import connect from "./utils/connect";
 import log from "./utils/logger";
 import logAlt from "./utils/potilogger";
 import userRoute from "./routes/user.route";
+import { deserializeUser } from "./middleware/deserializeUser";
 
 const app = express();
 async function runServer() {

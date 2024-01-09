@@ -1,8 +1,9 @@
 import { NextFunction } from "express";
 import Joi from "joi";
 import createUser from "../models/user.model";
+import { UserInput } from "../schemas/user.schema";
 
-let validateUserCredentials = function (Requestbody: Body) {
+let validateUserCredentials = function (Requestbody: UserInput) {
   const userSchema = Joi.object({
     username: Joi.string().min(5).max(20).required(),
     password: Joi.string()

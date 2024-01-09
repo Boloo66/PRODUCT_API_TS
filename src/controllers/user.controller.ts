@@ -2,8 +2,12 @@ import { Request, Response } from "express";
 import { omit } from "lodash";
 import { registerUser } from "../services/users.services";
 import { createUser } from "../services/users.services";
+import { UserInput } from "../schemas/user.schema";
 
-const register = async function (req: Request, res: Response) {
+const registerController = async function (
+  req: Request<{}, {}, UserInput>,
+  res: Response
+) {
   //Do not implement the logic here
   const validation = await registerUser(req.body);
   if (validation.error) {
@@ -23,4 +27,4 @@ const register = async function (req: Request, res: Response) {
   });
 };
 
-export default { register };
+export { registerController };
