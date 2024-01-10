@@ -26,7 +26,7 @@ export const createUserSessionController = async (
   //create access  token
   const accessToken = signJwt(
     { ...user, session: session._id },
-    { expiresIn: "3m" }
+    { expiresIn: "1m" }
   );
   //create refresh token
   const refreshToken = signJwt(
@@ -45,12 +45,16 @@ export async function getUserSessionHandler(req: CustomRequest, res: Response) {
   //get userId
 
   const userId = req.user?._id;
+  console.log(userId);
   const sessions = await findSessions({ user: userId, valid: true });
   // const customResponse: CustomResponse = {
   //   sessions: sessions,
   // };
   // use userId to filtter session collection
   //return all sessions
+  if (sessions.length == 0) {
+    return res.status(200).send({});
+  }
   return res.status(200).json(sessions);
 }
 
